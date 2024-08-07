@@ -1,0 +1,71 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserTypeEnum {
+  COMMON
+  SHOPKEEPER
+}
+
+enum DocumentTypeEnum {
+  CPF
+  CNPJ
+}
+
+enum TransactionType {
+  CREDIT
+  DEBIT
+}
+
+model User {
+  id        String   @id
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  deletedAt DateTime @map("deleted_at")
+
+  name         String           @db.VarChar(255)
+  email        String           @unique @db.VarChar(255)
+  type         UserTypeEnum
+  document     String           @db.VarChar(18)
+  documentType DocumentTypeEnum
+  passwordHash String           @map("password_hash") @db.VarChar(255)
+
+  bankAccount BankAccount?
+
+  @@map("users")
+}
+
+model BankAccount {
+  id        String   @id
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  deletedAt DateTime @map("deleted_at")
+
+  userId         String @unique @map("user_id")
+  user           User   @relation(fields: [userId], references: [id])
+  balanceInCents BigInt @default(0) @map("balance_in_cents")
+
+  Transaction Transaction[]
+
+  @@map("bank_accounts")
+}
+
+model Transaction {
+  id        String   @id
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  type          TransactionType
+  amountInCents BigInt          @default(0) @map("amount_in_cents")
+  operationId   String          @map("operation_id")
+  bankAccountId String          @map("from_bank_account_id")
+
+  bankAccount BankAccount @relation(fields: [bankAccountId], references: [id])
+
+  @@map("transactions")
+}

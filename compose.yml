@@ -1,0 +1,27 @@
+version: '3.7'
+
+volumes:
+  easy-transfer-db-data:
+    driver: local
+
+networks:
+  easy-transfer-network:
+
+services:
+ easy-transfer-db:    
+    container_name: easy-transfer-db 
+    image: bitnami/postgresql
+    networks:
+      - easy-transfer-network
+    volumes:
+      - easy-transfer-db-data:/bitnami/postgresql
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRESQL_USERNAME=easy_transfer_user
+      - POSTGRESQL_PASSWORD=easy_transfer_pass
+      - POSTGRESQL_DATABASE=easy_transfer
+      - POSTGRESQL_LOG_TIMEZONE=America/Fortaleza
+      - POSTGRESQL_TIMEZONE=America/Fortaleza
+
+  
