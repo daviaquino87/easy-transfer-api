@@ -52,6 +52,9 @@ CREATE TABLE "transactions" (
 CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "users_document_key" ON "users"("document");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "bank_accounts_user_id_key" ON "bank_accounts"("user_id");
 
 -- AddForeignKey
