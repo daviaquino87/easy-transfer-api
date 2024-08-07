@@ -1,6 +1,9 @@
 import { Module } from '@nestjs/common';
 import { UsersController } from '@/main/api/identification/controller/users.controller';
-import { CreateUserUseCase } from '@/main/api/identification/use-cases';
+import {
+  CreateSessionUseCase,
+  CreateUserUseCase,
+} from '@/main/api/identification/use-cases';
 import { DatabaseModule } from '@/infra/database/database.module';
 import { EnvModule } from '@/infra/env/env.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -9,6 +12,7 @@ import { authConfig } from '@/main/api/identification/constants';
 import { EnvService } from '@/infra/env/env.service';
 import { JwtModule } from '@nestjs/jwt';
 import { JWTAuthStrategy } from '@/main/api/identification/strategies/jwt-auth.strategy';
+import { AuthController } from './identification/controller/auth.controller';
 
 @Module({
   imports: [
@@ -33,7 +37,7 @@ import { JWTAuthStrategy } from '@/main/api/identification/strategies/jwt-auth.s
       },
     }),
   ],
-  providers: [JWTAuthStrategy, CreateUserUseCase],
-  controllers: [UsersController],
+  providers: [JWTAuthStrategy, CreateUserUseCase, CreateSessionUseCase],
+  controllers: [AuthController, UsersController],
 })
 export class HttpModule {}

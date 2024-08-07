@@ -87,8 +87,6 @@ export class CreateUserUseCase {
         document: dtoValidated.document,
         documentType: dtoValidated.documentType,
         passwordHash,
-        createdAt: new Date(),
-        updatedAt: new Date(),
       },
     });
 
