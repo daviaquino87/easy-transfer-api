@@ -8,6 +8,7 @@ import { CreateUserDTO } from '@/main/api/users/dtos/create-user.dto';
 import { validateDTO } from '@/common/utils/validate-dto';
 import { PrismaService } from '@/infra/database/prisma/prisma.service';
 import { randomUUID } from 'crypto';
+import { hash } from 'bcryptjs';
 
 interface IExecuteInput {
   createUserDto: CreateUserDTO;
@@ -75,6 +76,8 @@ export class CreateUserUseCase {
   async execute(params: IExecuteInput): Promise<IExecuteOutput> {
     const { dtoValidated } = await this.applyValidations(params);
 
+    const passwordHash = await hash(dtoValidated.password, 6);
+
     const user = await this.prismaService.user.create({
       data: {
         id: randomUUID(),
@@ -83,7 +86,7 @@ export class CreateUserUseCase {
         type: dtoValidated.type,
         document: dtoValidated.document,
         documentType: dtoValidated.documentType,
-        passwordHash: dtoValidated.password,
+        passwordHash,
         createdAt: new Date(),
         updatedAt: new Date(),
       },
