@@ -87,6 +87,11 @@ export class CreateUserUseCase {
         document: dtoValidated.document,
         documentType: dtoValidated.documentType,
         passwordHash,
+        bankAccount: {
+          create: {
+            id: randomUUID(),
+          },
+        },
       },
     });
 

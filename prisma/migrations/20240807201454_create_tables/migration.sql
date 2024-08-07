@@ -10,9 +10,9 @@ CREATE TYPE "TransactionType" AS ENUM ('CREDIT', 'DEBIT');
 -- CreateTable
 CREATE TABLE "users" (
     "id" TEXT NOT NULL,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
-    "deleted_at" TIMESTAMP(3) NOT NULL,
+    "created_at" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3),
+    "deleted_at" TIMESTAMP(3),
     "name" VARCHAR(255) NOT NULL,
     "email" VARCHAR(255) NOT NULL,
     "type" "UserTypeEnum" NOT NULL,
@@ -26,9 +26,9 @@ CREATE TABLE "users" (
 -- CreateTable
 CREATE TABLE "bank_accounts" (
     "id" TEXT NOT NULL,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
-    "deleted_at" TIMESTAMP(3) NOT NULL,
+    "created_at" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3),
+    "deleted_at" TIMESTAMP(3),
     "user_id" TEXT NOT NULL,
     "balance_in_cents" BIGINT NOT NULL DEFAULT 0,
 
@@ -38,8 +38,8 @@ CREATE TABLE "bank_accounts" (
 -- CreateTable
 CREATE TABLE "transactions" (
     "id" TEXT NOT NULL,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
+    "created_at" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3),
     "type" "TransactionType" NOT NULL,
     "amount_in_cents" BIGINT NOT NULL DEFAULT 0,
     "operation_id" TEXT NOT NULL,

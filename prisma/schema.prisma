@@ -41,10 +41,10 @@ model User {
 }
 
 model BankAccount {
-  id        String   @id
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-  deletedAt DateTime @map("deleted_at")
+  id        String    @id
+  createdAt DateTime? @default(now()) @map("created_at")
+  updatedAt DateTime? @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
 
   userId         String @unique @map("user_id")
   user           User   @relation(fields: [userId], references: [id])
@@ -56,9 +56,9 @@ model BankAccount {
 }
 
 model Transaction {
-  id        String   @id
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  id        String    @id
+  createdAt DateTime? @default(now()) @map("created_at")
+  updatedAt DateTime? @updatedAt @map("updated_at")
 
   type          TransactionType
   amountInCents BigInt          @default(0) @map("amount_in_cents")
