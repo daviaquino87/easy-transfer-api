@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { UsersController } from '@/main/api/users/controller/users.controller';
-import { CreateUserUseCase } from '@/main/api/users/use-cases';
+import { UsersController } from '@/main/api/identification/controller/users.controller';
+import { CreateUserUseCase } from '@/main/api/identification/use-cases';
 import { DatabaseModule } from '@/infra/database/database.module';
 import { EnvModule } from '@/infra/env/env.module';
 import { ConfigModule } from '@nestjs/config';

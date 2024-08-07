@@ -4,7 +4,7 @@ import {
   ConflictException,
   Injectable,
 } from '@nestjs/common';
-import { CreateUserDTO } from '@/main/api/users/dtos/create-user.dto';
+import { CreateUserDTO } from '@/main/api/identification/dtos/create-user.dto';
 import { validateDTO } from '@/common/utils/validate-dto';
 import { PrismaService } from '@/infra/database/prisma/prisma.service';
 import { randomUUID } from 'crypto';
