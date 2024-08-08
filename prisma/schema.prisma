@@ -37,6 +37,7 @@ model User {
 
   bankAccount BankAccount?
 
+  @@unique([document, documentType])
   @@map("users")
 }
 
