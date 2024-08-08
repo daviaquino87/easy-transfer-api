@@ -50,7 +50,7 @@ model BankAccount {
   user           User   @relation(fields: [userId], references: [id])
   balanceInCents BigInt @default(0) @map("balance_in_cents")
 
-  Transaction Transaction[]
+  transactions Transaction[]
 
   @@map("bank_accounts")
 }
