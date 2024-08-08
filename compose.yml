@@ -8,6 +8,23 @@ networks:
   easy-transfer-network:
 
 services:
+ easy-transfer-rabbitmq:
+    container_name: easy-transfer-rabbitmq
+    image: "rabbitmq:3-management"
+    environment:
+      RABBITMQ_ERLANG_COOKIE: "SWQOKODSQALRPCLMNEQG"
+      RABBITMQ_DEFAULT_USER: "rabbitmq_user"
+      RABBITMQ_DEFAULT_PASS: "rabbitmq_password"
+      RABBITMQ_DEFAULT_VHOST: "/"
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "check_running"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+ 
  easy-transfer-db:    
     container_name: easy-transfer-db 
     image: bitnami/postgresql
