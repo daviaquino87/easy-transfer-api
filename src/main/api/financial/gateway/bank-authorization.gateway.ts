@@ -1,3 +1,6 @@
+import { EnvService } from '@/infra/env/env.service';
+import { Injectable, Logger } from '@nestjs/common';
+
 interface IResponse {
   status: string;
   data: {
@@ -5,20 +8,30 @@ interface IResponse {
   };
 }
 
+@Injectable()
 export class BankAuthorizationGateway {
-  private static readonly url = 'https://util.devi.tools/api/v2/authorize';
+  private logger = new Logger(BankAuthorizationGateway.name);
 
-  public static async authorizeEtfService(): Promise<boolean> {
+  constructor(private readonly envService: EnvService) {}
+
+  public async authorizeEtfService(): Promise<boolean> {
+    const url = this.envService.get('BANK_AUTHORIZATION_URL');
+
     try {
-      const response = await fetch(BankAuthorizationGateway.url, {
+      const response = await fetch(url, {
         method: 'GET',
       });
+
+      if (!response.ok) {
+        this.logger.error(`Request failed with status ${response.status}`);
+        return false;
+      }
 
       const data: IResponse = await response.json();
 
       return data.status === 'success' && data.data.authorization;
     } catch (error) {
-      console.error('Authorization request failed:', error);
+      this.logger.error('Authorization request failed:', error);
       return false;
     }
   }

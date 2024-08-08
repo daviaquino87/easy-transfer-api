@@ -6,6 +6,7 @@ export const envSchema = z.object({
   DATABASE_URL: z.string(),
   JWT_AUTH_SECRET: z.string().min(10),
   LOG_DATABASE: z.string().optional().default('false'),
+  BANK_AUTHORIZATION_URL: z.string(),
 });
 
 export type EnvSchema = z.infer<typeof envSchema>;

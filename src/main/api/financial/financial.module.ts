@@ -4,10 +4,15 @@ import {
   DepositUseCase,
   ElectronicFoundsTransferUseCase,
 } from '@/main/api/financial/use-cases';
+import { BankAuthorizationGateway } from '@/main/api/financial/gateway/bank-authorization.gateway';
 
 @Module({
   imports: [],
-  providers: [DepositUseCase, ElectronicFoundsTransferUseCase],
+  providers: [
+    DepositUseCase,
+    ElectronicFoundsTransferUseCase,
+    BankAuthorizationGateway,
+  ],
   controllers: [FinancialController],
   exports: [],
 })

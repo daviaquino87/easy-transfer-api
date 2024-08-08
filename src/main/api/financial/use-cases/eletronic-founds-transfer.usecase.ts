@@ -25,7 +25,10 @@ interface IApplyValidationsOutput {
 
 @Injectable()
 export class ElectronicFoundsTransferUseCase {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly bankAuthorizationGateway: BankAuthorizationGateway,
+  ) {}
 
   async ensurePayerBankAccountIsValid(
     payerId: string,
@@ -167,7 +170,7 @@ export class ElectronicFoundsTransferUseCase {
       });
 
       const operationAuthorized =
-        await BankAuthorizationGateway.authorizeEtfService();
+        await this.bankAuthorizationGateway.authorizeEtfService();
 
       if (!operationAuthorized) {
         throw new BadRequestException('Ops! Operação não autorizada');
