@@ -30,7 +30,7 @@ export class DepositUseCase {
     });
 
     if (!bankAccount) {
-      throw new NotFoundException('Conta bancária inválida');
+      throw new NotFoundException('Ops! Conta bancária inválida');
     }
 
     return bankAccount;

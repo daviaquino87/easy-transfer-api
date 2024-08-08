@@ -8,9 +8,9 @@ export class SendEmailOfTransferHandle {
     private readonly mockSendNotificationGateway: MockSendNotificationGateway,
   ) {}
 
-  async execute(SendEmailOfTransferEvent: ISendEmailOfTransfer) {
+  async execute(sendEmailOfTransferEvent: ISendEmailOfTransfer) {
     await this.mockSendNotificationGateway.sendNotification(
-      SendEmailOfTransferEvent,
+      sendEmailOfTransferEvent,
     );
   }
 }

@@ -52,7 +52,7 @@ export class ElectronicFoundsTransferUseCase {
     });
 
     if (!payer) {
-      throw new NotFoundException('Ops! A pagador informado  não existe');
+      throw new NotFoundException('Ops! O pagador informado  não existe');
     }
 
     if (payer.type == 'SHOPKEEPER') {
@@ -87,7 +87,7 @@ export class ElectronicFoundsTransferUseCase {
     });
 
     if (!payee) {
-      throw new NotFoundException('Ops! A beneficiário informado não existe');
+      throw new NotFoundException('Ops! O beneficiário informado não existe');
     }
 
     return payee.bankAccount;
@@ -109,7 +109,7 @@ export class ElectronicFoundsTransferUseCase {
 
     if (dtoValidated.payeeId === dtoValidated.payerId) {
       throw new BadRequestException(
-        'Ops! O pagador e o recebedor devem ser diferentes',
+        'Ops! O pagador e o beneficiário devem ser diferentes',
       );
     }
 
