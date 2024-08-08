@@ -4,14 +4,15 @@ import {
   DepositUseCase,
   ElectronicFoundsTransferUseCase,
 } from '@/main/api/financial/use-cases';
-import { BankAuthorizationGateway } from '@/main/api/financial/gateway/bank-authorization.gateway';
+import { MockBankAuthorizationGateway } from '@/main/api/financial/gateway/mock-bank-authorization.gateway';
+import { RabbitMqModule } from '@/infra/rabbitmq/rabbitmq.module';
 
 @Module({
-  imports: [],
+  imports: [RabbitMqModule],
   providers: [
     DepositUseCase,
     ElectronicFoundsTransferUseCase,
-    BankAuthorizationGateway,
+    MockBankAuthorizationGateway,
   ],
   controllers: [FinancialController],
   exports: [],

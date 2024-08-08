@@ -7,8 +7,11 @@ import { ElectronicFoundsTransferDTO } from '@/main/api/financial/dtos/eletronic
 import { validateDTO } from '@/common/utils/validate-dto';
 import { PrismaService } from '@/infra/database/prisma/prisma.service';
 import { randomUUID } from 'crypto';
-import { IBankAccount } from '@/common/interfaces/bank-account.interface';
-import { BankAuthorizationGateway } from '@/main/api/financial/gateway/bank-authorization.gateway';
+import { IBankAccountWithUser } from '@/common/interfaces/bank-account.interface';
+import { MockBankAuthorizationGateway } from '@/main/api/financial/gateway/mock-bank-authorization.gateway';
+import { PublisherService } from '@/infra/rabbitmq/publisher.service';
+import { obfuscateDocument } from '@/common/utils/obfuscate-document';
+import { DocumentTypeEnum } from '@/common/enums/user.enum';
 
 interface IExecuteInput {
   electronicFoundsTransferDto: ElectronicFoundsTransferDTO;
@@ -18,8 +21,8 @@ interface IExecuteInput {
 type IApplyValidationsInput = IExecuteInput;
 
 interface IApplyValidationsOutput {
-  payerBankAccount: IBankAccount;
-  payeeBankAccount: IBankAccount;
+  payerBankAccount: IBankAccountWithUser;
+  payeeBankAccount: IBankAccountWithUser;
   dtoValidated: ElectronicFoundsTransferDTO;
 }
 
@@ -27,19 +30,24 @@ interface IApplyValidationsOutput {
 export class ElectronicFoundsTransferUseCase {
   constructor(
     private readonly prismaService: PrismaService,
-    private readonly bankAuthorizationGateway: BankAuthorizationGateway,
+    private readonly mockBankAuthorizationGateway: MockBankAuthorizationGateway,
+    private readonly publisherService: PublisherService,
   ) {}
 
   async ensurePayerBankAccountIsValid(
     payerId: string,
     userId: string,
-  ): Promise<IBankAccount> {
+  ): Promise<IBankAccountWithUser> {
     const payer = await this.prismaService.user.findUnique({
       where: {
         id: payerId,
       },
       include: {
-        bankAccount: true,
+        bankAccount: {
+          include: {
+            user: true,
+          },
+        },
       },
     });
 
@@ -62,13 +70,19 @@ export class ElectronicFoundsTransferUseCase {
     return payer.bankAccount;
   }
 
-  async ensurePayeeBankAccountIsValid(payeeId: string): Promise<IBankAccount> {
+  async ensurePayeeBankAccountIsValid(
+    payeeId: string,
+  ): Promise<IBankAccountWithUser> {
     const payee = await this.prismaService.user.findUnique({
       where: {
         id: payeeId,
       },
       include: {
-        bankAccount: true,
+        bankAccount: {
+          include: {
+            user: true,
+          },
+        },
       },
     });
 
@@ -170,11 +184,35 @@ export class ElectronicFoundsTransferUseCase {
       });
 
       const operationAuthorized =
-        await this.bankAuthorizationGateway.authorizeEtfService();
+        await this.mockBankAuthorizationGateway.authorizeEtfService();
 
       if (!operationAuthorized) {
         throw new BadRequestException('Ops! Operação não autorizada');
       }
+    });
+
+    this.publisherService.notifyUser({
+      eventType: 'SendEmailOfTransfer',
+      data: {
+        email: payeeBankAccount.user.email,
+        value: dtoValidated.valueInCents,
+        payer: {
+          name: payerBankAccount.user.name,
+          documentType: payerBankAccount.user.documentType,
+          document: obfuscateDocument(
+            payerBankAccount.user.document,
+            payerBankAccount.user.documentType as DocumentTypeEnum,
+          ),
+        },
+        payee: {
+          name: payeeBankAccount.user.name,
+          documentType: payeeBankAccount.user.documentType,
+          document: obfuscateDocument(
+            payeeBankAccount.user.document,
+            payeeBankAccount.user.documentType as DocumentTypeEnum,
+          ),
+        },
+      },
     });
   }
 }

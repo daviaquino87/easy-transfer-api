@@ -10,6 +10,7 @@ export const envSchema = z.object({
   JWT_AUTH_SECRET: z.string().min(10),
 
   BANK_AUTHORIZATION_URL: z.string(),
+  SEND_NOTIFICATION_SERVICE_URL: z.string(),
 
   RABBITMQ_URL: z.string(),
 });

@@ -9,8 +9,8 @@ interface IResponse {
 }
 
 @Injectable()
-export class BankAuthorizationGateway {
-  private logger = new Logger(BankAuthorizationGateway.name);
+export class MockBankAuthorizationGateway {
+  private logger = new Logger(MockBankAuthorizationGateway.name);
 
   constructor(private readonly envService: EnvService) {}
 

@@ -13,6 +13,7 @@ import { Logger } from '@nestjs/common';
 import { EnvService } from '@/infra/env/env.service';
 import { HttpExceptionFilter } from '@/main/api/exception.filter';
 import { readFileSync } from 'fs';
+import { randomUUID } from 'crypto';
 
 const packageJson = readFileSync('package.json', 'utf-8');
 const { version, name, description } = JSON.parse(packageJson);
@@ -65,7 +66,9 @@ async function runServer(app: NestExpressApplication, port: number) {
 }
 
 async function bootstrap() {
-  Logger.log(`Start api application: ${name}:${version}`);
+  const instanceId = randomUUID();
+
+  Logger.log(`Start api application: ${name}:${version} - ${instanceId}`);
 
   const app = await NestFactory.create<NestExpressApplication>(HttpModule);
 

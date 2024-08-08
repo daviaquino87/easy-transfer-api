@@ -5,6 +5,7 @@ import { ConfigModule } from '@nestjs/config';
 import { envSchema } from '@/infra/env/env-schema';
 import { IdentificationModule } from '@/main/api/identification/identification.module';
 import { FinancialModule } from '@/main/api/financial/financial.module';
+import { RabbitMqModule } from '@/infra/rabbitmq/rabbitmq.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { FinancialModule } from '@/main/api/financial/financial.module';
     }),
     EnvModule,
     DatabaseModule,
+    RabbitMqModule,
     IdentificationModule,
     FinancialModule,
   ],
