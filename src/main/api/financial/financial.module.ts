@@ -1,10 +1,13 @@
 import { Module } from '@nestjs/common';
 import { FinancialController } from '@/main/api/financial/controllers/financial.controller';
-import { DepositUseCase } from '@/main/api/financial/use-cases';
+import {
+  DepositUseCase,
+  ElectronicFoundsTransferUseCase,
+} from '@/main/api/financial/use-cases';
 
 @Module({
   imports: [],
-  providers: [DepositUseCase],
+  providers: [DepositUseCase, ElectronicFoundsTransferUseCase],
   controllers: [FinancialController],
   exports: [],
 })

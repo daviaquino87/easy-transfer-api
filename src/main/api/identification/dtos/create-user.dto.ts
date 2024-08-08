@@ -32,7 +32,7 @@ export class CreateUserDTO {
   password: string;
 
   @IsEnum(UserTypeEnum, {
-    message: 'Ops! O tipo de usuário informado é inválido.',
+    message: 'Ops! O tipo de usuário informado está inválido.',
   })
   @IsNotBlank({
     message: 'Ops! O campo tipo de usuário é obrigatório.',
@@ -40,7 +40,7 @@ export class CreateUserDTO {
   type: UserTypeEnum;
 
   @IsEnum(DocumentTypeEnum, {
-    message: 'Ops! O tipo de documento informado é inválido.',
+    message: 'Ops! O tipo de documento informado está inválido.',
   })
   @IsNotBlank({
     message: 'Ops! O campo tipo de documento é obrigatório.',
